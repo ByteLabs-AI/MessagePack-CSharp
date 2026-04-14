@@ -15,9 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MessagePack.Experimental\MessagePack.Experimental.csproj">
-      <aliases>e</aliases>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\MessagePack.Annotations\MessagePack.Annotations.csproj" />
     <ProjectReference Include="..\..\src\MessagePack\MessagePack.csproj" />
   </ItemGroup>

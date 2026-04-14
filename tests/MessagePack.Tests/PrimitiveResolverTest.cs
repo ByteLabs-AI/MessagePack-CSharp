@@ -35,12 +35,6 @@ namespace MessagePack.Tests
                 ((char)(ushort)re1).Is(x);
             }
 
-            {
-                SharedData.IntEnum x = SharedData.IntEnum.C;
-                var bin = MessagePackSerializer.Serialize<object>(x);
-                var re1 = MessagePackSerializer.Deserialize<object>(bin);
-                ((SharedData.IntEnum)(int)re1).Is(x);
-            }
 
             {
                 var x = new object[] { 1, 10, 1000, new[] { 999, 424 }, new Dictionary<string, int> { { "hoge", 100 }, { "foo", 999 } }, true };

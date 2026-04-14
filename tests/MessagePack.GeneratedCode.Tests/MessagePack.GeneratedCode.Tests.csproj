@@ -12,9 +12,5 @@
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\sandbox\Sandbox\Sandbox.csproj" />
-  </ItemGroup>
-
   <Import Project="..\SourceGeneratorConsumer.targets" />
 </Project>

@@ -736,7 +736,7 @@ public class Bar : Foo
             """;
         await new VerifyCS.Test
         {
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
             CompilerDiagnostics = CompilerDiagnostics.Errors,
             MarkupOptions = MarkupOptions.UseFirstDescriptor,
             SolutionTransforms =
@@ -775,7 +775,7 @@ public class Bar : Foo
             """;
         await new VerifyCS.Test
         {
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
             CompilerDiagnostics = CompilerDiagnostics.Errors,
             MarkupOptions = MarkupOptions.UseFirstDescriptor,
             SolutionTransforms =
@@ -809,7 +809,7 @@ public class Bar : Foo
 
         await new VerifyCS.Test
         {
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
             CompilerDiagnostics = CompilerDiagnostics.Errors,
             MarkupOptions = MarkupOptions.UseFirstDescriptor,
             SolutionTransforms =
@@ -843,7 +843,7 @@ public class Bar : Foo
 
         await new VerifyCS.Test
         {
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
             CompilerDiagnostics = CompilerDiagnostics.Errors,
             MarkupOptions = MarkupOptions.UseFirstDescriptor,
             SolutionTransforms =
@@ -877,7 +877,7 @@ public class Bar : Foo
 
         await new VerifyCS.Test
         {
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+            ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
             CompilerDiagnostics = CompilerDiagnostics.Errors,
             MarkupOptions = MarkupOptions.UseFirstDescriptor,
             SolutionTransforms =

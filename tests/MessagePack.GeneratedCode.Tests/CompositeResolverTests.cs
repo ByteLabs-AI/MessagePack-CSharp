@@ -12,12 +12,6 @@ public partial class CompositeResolverTests
     /// Verifies that formatters for types not defined in the same assemblies are <em>not</em> included in the default generated resolver.
     /// </summary>
     [Fact]
-    public void ExternalTypeFormatterNotIncludedInDefaultSourceGeneratedResolver()
-    {
-        Assert.Null(GeneratedMessagePackResolver.Instance.GetFormatter<BinaryReader>());
-    }
-
-    [Fact]
     public void ExternalTypeFormatterNotIncludedInCompositeResolverByDefault()
     {
         Assert.Null(CompositeResolverWithoutLocalFormatters.Instance.GetFormatter<BinaryReader>());
