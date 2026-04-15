@@ -144,6 +144,9 @@ partial class Build
     IEnumerable<AbsolutePath> NuGetPackageFiles
         => From<IPack>().PackagesDirectory.GlobFiles("*.nupkg");
 
+    Configure<DotNetNuGetPushSettings> IPublish.PushSettings => _ => _
+            .SetSkipDuplicate(true);
+
     //string ICreateGitHubRelease.Name => MajorMinorPatchVersion;
     //IEnumerable<AbsolutePath> ICreateGitHubRelease.AssetFiles => NuGetPackageFiles;
 
