@@ -51,6 +51,7 @@
         "CheckoutExternalRepositories",
         "Clean",
         "Compile",
+        "Feature",
         "GeneratePublicApi",
         "Hotfix",
         "Milestone",
@@ -157,9 +158,8 @@
             "Release"
           ]
         },
-        "FeedzNuGetApiKey": {
-          "type": "string",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        "FeatureName": {
+          "type": "string"
         },
         "IgnoreFailedSources": {
           "type": "boolean",
@@ -168,7 +168,7 @@
         "Major": {
           "type": "boolean"
         },
-        "PublicNuGetApiKey": {
+        "PublishNuGetApiKey": {
           "type": "string",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
