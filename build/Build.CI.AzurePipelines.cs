@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.CI.AzurePipelines.Configuration;
 using Nuke.Common.Execution;
+using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
 using Nuke.Components;
 
@@ -16,11 +17,15 @@ using Nuke.Components;
     ExcludedTargets = new[] { nameof(Clean), nameof(ISignPackages.SignPackages) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
     ImportVariableGroups = new[] { "GlobalVariablesLibrary" },
-    FetchDepth = 0)]
+    FetchDepth = 0,
+    EnableAccessToken = true)]
 partial class Build
 {
     public class AzurePipelinesAttribute : Nuke.Common.CI.AzurePipelines.AzurePipelinesAttribute
     {
+        public bool NuGetAuthenticate { get; set; } = true;
+        public string[]? SdkVersions { get; set; } = System.Array.Empty<string>();
+
         public AzurePipelinesAttribute(
             string suffix,
             AzurePipelinesImage image,
@@ -42,6 +47,56 @@ partial class Build
                 ? $"{symbol} {job.DisplayName}"
                 : $"{symbol} {job.DisplayName} 🧩").Trim();
             return job;
+        }
+
+        protected override IEnumerable<AzurePipelinesStep> GetSteps(ExecutableTarget executableTarget, IReadOnlyCollection<ExecutableTarget> relevantTargets, AzurePipelinesImage image)
+        {
+            if (NuGetAuthenticate)
+            {
+                yield return new AzurePipelinesNuGetAuthenticateStep();
+            }
+
+            if (SdkVersions?.Length > 0)
+            {
+                foreach (var version in SdkVersions)
+                {
+                    yield return new AzurePipelinesSdkInstallStep(version);
+                }
+            }
+
+            foreach (var step in base.GetSteps(executableTarget, relevantTargets, image))
+            {
+                yield return step;
+            }
+        }
+
+    }
+
+    public class AzurePipelinesNuGetAuthenticateStep : AzurePipelinesStep
+    {
+        public override void Write(CustomFileWriter writer) => writer.WriteLine("- task: NuGetAuthenticate@1");
+    }
+
+    public class AzurePipelinesSdkInstallStep : AzurePipelinesStep
+    {
+        public string Version { get; }
+
+        public AzurePipelinesSdkInstallStep(string version)
+        {
+            Version = version;
+        }
+
+        public override void Write(CustomFileWriter writer)
+        {
+            using (writer.WriteBlock("- task: UseDotNet@2"))
+            {
+                writer.WriteLine($"displayName: Installing SDK Version {Version}");
+                using (writer.WriteBlock("inputs:"))
+                {
+                    writer.WriteLine("packageType: 'sdk'");
+                    writer.WriteLine($"version: {Version.SingleQuote()}");
+                }
+            }
         }
     }
 }

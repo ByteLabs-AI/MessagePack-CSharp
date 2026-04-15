@@ -33,6 +33,7 @@ stages:
         strategy:
           parallel: 2
         steps:
+          - task: NuGetAuthenticate@1
           - checkout: self
             fetchDepth: 0
           - task: Cache@2
@@ -51,6 +52,8 @@ stages:
             displayName: 'Run: Restore, Compile, Test'
             inputs:
               script: './build.cmd Restore Compile Test --skip --partition $(System.JobPositionInPhase)/2'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
           - task: PublishBuildArtifacts@1
             displayName: 'Publish: test-results'
             inputs:
@@ -60,6 +63,7 @@ stages:
         displayName: '🚚 Publish'
         dependsOn: [ Test ]
         steps:
+          - task: NuGetAuthenticate@1
           - checkout: self
             fetchDepth: 0
           - task: Cache@2
@@ -78,6 +82,8 @@ stages:
             displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
               script: './build.cmd Restore Compile Pack Publish --skip'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   - stage: windows_latest
     displayName: 'windows-latest'
     dependsOn: [  ]
@@ -90,6 +96,7 @@ stages:
         strategy:
           parallel: 2
         steps:
+          - task: NuGetAuthenticate@1
           - checkout: self
             fetchDepth: 0
           - task: Cache@2
@@ -108,6 +115,8 @@ stages:
             displayName: 'Run: Restore, Compile, Test'
             inputs:
               script: './build.cmd Restore Compile Test --skip --partition $(System.JobPositionInPhase)/2'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
           - task: PublishBuildArtifacts@1
             displayName: 'Publish: test-results'
             inputs:
@@ -117,6 +126,7 @@ stages:
         displayName: '🚚 Publish'
         dependsOn: [ Test ]
         steps:
+          - task: NuGetAuthenticate@1
           - checkout: self
             fetchDepth: 0
           - task: Cache@2
@@ -135,6 +145,8 @@ stages:
             displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
               script: './build.cmd Restore Compile Pack Publish --skip'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   - stage: macOS_latest
     displayName: 'macOS-latest'
     dependsOn: [  ]
@@ -147,6 +159,7 @@ stages:
         strategy:
           parallel: 2
         steps:
+          - task: NuGetAuthenticate@1
           - checkout: self
             fetchDepth: 0
           - task: Cache@2
@@ -165,6 +178,8 @@ stages:
             displayName: 'Run: Restore, Compile, Test'
             inputs:
               script: './build.cmd Restore Compile Test --skip --partition $(System.JobPositionInPhase)/2'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
           - task: PublishBuildArtifacts@1
             displayName: 'Publish: test-results'
             inputs:
@@ -174,6 +189,7 @@ stages:
         displayName: '🚚 Publish'
         dependsOn: [ Test ]
         steps:
+          - task: NuGetAuthenticate@1
           - checkout: self
             fetchDepth: 0
           - task: Cache@2
@@ -192,3 +208,5 @@ stages:
             displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
               script: './build.cmd Restore Compile Pack Publish --skip'
+            env:
+              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
