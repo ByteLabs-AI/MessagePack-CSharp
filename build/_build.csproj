@@ -21,7 +21,7 @@
     <PackageDownload Include="Codecov.Tool" Version="[1.13.0]" />
     <PackageDownload Include="coverlet.console" Version="[6.0.4]" />
     <!--<PackageDownload Include="GitVersion.CommandLine" Version="[5.12.0]" />-->
-    <PackageDownload Include="GitVersion.Tool" Version="[5.12.0]" />
+    <PackageDownload Include="GitVersion.Tool" Version="[6.7.0]" />
     <PackageDownload Include="JetBrains.ReSharper.GlobalTools" Version="[2024.2.7]" />
     <PackageDownload Include="nbgv" Version="[3.9.50]" />
     <PackageDownload Include="NuGet.CommandLine" Version="[6.11.1]" />
