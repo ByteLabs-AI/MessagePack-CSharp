@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>MessagePackAnalyzer</PackageId>
+    <PackageId>ByteLabs.MessagePackAnalyzer</PackageId>
 
     <Description>Analyzers and source generator for MessagePack for C#. Verify rules for [MessagePackObject] and code fix for [Key]. A roslyn source generator for AOT or faster startup of applications that use the MessagePack nuget package.</Description>
     <Title>MessagePack Source Generator and Analyzer</Title>
