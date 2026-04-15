@@ -17,8 +17,10 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities;
+using Nuke.Common.Utilities.Collections;
 using Nuke.Components;
 using static Nuke.Common.Tools.ReSharper.ReSharperTasks;
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [DotNetVerbosityMapping]
 [ShutdownDotNetAfterServerBuild]
@@ -37,7 +39,7 @@ partial class Build
         IReportIssues,
         IReportDuplicates,
         IPublish//,
-        //ICreateGitHubRelease
+                //ICreateGitHubRelease
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -79,6 +81,31 @@ partial class Build
             OutputDirectory.CreateOrCleanDirectory();
         });
 
+    Target ICompile.Compile => _ => _
+    .DependsOn<IRestore>(x => x.Restore)
+    .WhenSkipped(DependencyBehavior.Skip)
+    .Executes(() =>
+    {
+
+        ReportSummary(_ => _
+            .WhenNotNull(this as IHazGitVersion, (_, o) => _
+                .AddPair("AssemblyVersion", o.Versioning.AssemblySemFileVer))
+            .WhenNotNull(this as IHazNerdbankGitVersioning, (_, o) => _
+                .AddPair("AssemblyVersion", o.Versioning.NuGetPackageVersion)));
+
+        DotNetBuild(_ => _
+            .Apply(((ICompile)this).CompileSettingsBase)
+            .Apply(((ICompile)this).CompileSettings));
+
+        DotNetPublish(_ => _
+                .Apply(((ICompile)this).PublishSettingsBase)
+                .Apply(((ICompile)this).PublishSettings)
+                .CombineWith(((ICompile)this).PublishConfigurations, (_, v) => _
+                    .SetProject(v.Project)
+                    .SetFramework(v.Framework)),
+            ((ICompile)this).PublishDegreeOfParallelism);
+    });
+
     Configure<DotNetBuildSettings> ICompile.CompileSettings => _ => _
         .When(!ScheduledTargets.Contains(((IPublish)this).Publish), _ => _
             .ClearProperties());
@@ -88,7 +115,7 @@ partial class Build
             .ClearProperties());
 
     IEnumerable<(Nuke.Common.ProjectModel.Project Project, string Framework)> ICompile.PublishConfigurations =>
-        from project in _solution.AllProjects.Where(x=>x.Name.StartsWith("MessagePack"))
+        from project in _solution.AllProjects.Where(x => x.Name.StartsWith("MessagePack"))
         from framework in project.GetTargetFrameworks()
         select (project, framework);
 
@@ -128,8 +155,8 @@ partial class Build
     [Parameter] readonly string ArtifactsFeed;
     string DefaultDeploymentVersion => "9999.0.0";
 
-    [Parameter] [Secret] readonly string PublicNuGetApiKey;
-    [Parameter] [Secret] readonly string FeedzNuGetApiKey;
+    [Parameter][Secret] readonly string PublicNuGetApiKey;
+    [Parameter][Secret] readonly string FeedzNuGetApiKey;
 
     bool IsPublicRelease => GitRepository.IsOnMasterBranch() || GitRepository.IsOnReleaseBranch();
     string IPublish.NuGetSource => IsPublicRelease ? ArtifactsFeed : BetaArtifactsFeed;
@@ -138,7 +165,7 @@ partial class Build
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
         .Consumes(From<IPack>().Pack)
-        .Requires(() => IsPublicRelease && Host is AzurePipelines )
+        .Requires(() => IsPublicRelease && Host is AzurePipelines)
         .WhenSkipped(DependencyBehavior.Execute);
 
     IEnumerable<AbsolutePath> NuGetPackageFiles
