@@ -162,12 +162,11 @@ partial class Build
     [Parameter] readonly string ArtifactsFeed;
     string DefaultDeploymentVersion => "9999.0.0";
 
-    [Parameter][Secret] readonly string PublicNuGetApiKey;
-    [Parameter][Secret] readonly string FeedzNuGetApiKey;
+    [Parameter][Secret] readonly string PublishNuGetApiKey;
 
     bool IsPublicRelease => GitRepository.IsOnMasterBranch() || GitRepository.IsOnReleaseBranch();
     string IPublish.NuGetSource => IsPublicRelease ? ArtifactsFeed : BetaArtifactsFeed;
-    string IPublish.NuGetApiKey => "az";
+    string IPublish.NuGetApiKey => (Host is AzurePipelines) ? "az" : PublishNuGetApiKey;
 
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
