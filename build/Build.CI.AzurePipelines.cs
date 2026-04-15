@@ -11,7 +11,7 @@ using Nuke.Components;
     AzurePipelinesImage.WindowsLatest,
     AzurePipelinesImage.MacOsLatest,
     PullRequestsDisabled = true,
-    InvokedTargets = new[] { nameof(ITest.Test), nameof(IPack.Pack) },
+    InvokedTargets = new[] { nameof(ITest.Test), nameof(IPublish.Publish) },
     NonEntryTargets = new[] { nameof(IRestore.Restore), nameof(ICompile.Compile) },
     ExcludedTargets = new[] { nameof(Clean), nameof(ISignPackages.SignPackages) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },

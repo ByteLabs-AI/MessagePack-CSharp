@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.AppVeyor;
@@ -23,7 +24,7 @@ using static Nuke.Common.Tools.ReSharper.ReSharperTasks;
 [ShutdownDotNetAfterServerBuild]
 partial class Build
     : NukeBuild,
-        IHazChangelog,
+        //IHazChangelog,
         IHazGitRepository,
         //IHazGitVersion,
         IHazNerdbankGitVersioning,
@@ -35,8 +36,8 @@ partial class Build
         IReportCoverage,
         IReportIssues,
         IReportDuplicates,
-        IPublish,
-        ICreateGitHubRelease
+        IPublish//,
+        //ICreateGitHubRelease
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -119,8 +120,9 @@ partial class Build
     IEnumerable<string> IReportIssues.InspectCodeFailOnCategories => new string[0];
 
     Configure<DotNetPackSettings> IPack.PackSettings => _ => _
-        .When(Host is Terminal or GitHubActions { Workflow: AlphaDeployment }, _ => _
-            .SetVersion(DefaultDeploymentVersion));
+        .When(Host is Terminal, _ => _
+            .SetVersion(DefaultDeploymentVersion))
+         .SetNoBuild(false);
 
     [Parameter] readonly string BetaArtifactsFeed;
     [Parameter] readonly string ArtifactsFeed;
@@ -136,26 +138,26 @@ partial class Build
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
         .Consumes(From<IPack>().Pack)
-        .Requires(() => IsPublicRelease && Host is AzurePipelines)
+        .Requires(() => IsPublicRelease && Host is AzurePipelines )
         .WhenSkipped(DependencyBehavior.Execute);
 
     IEnumerable<AbsolutePath> NuGetPackageFiles
         => From<IPack>().PackagesDirectory.GlobFiles("*.nupkg");
 
-    string ICreateGitHubRelease.Name => MajorMinorPatchVersion;
-    IEnumerable<AbsolutePath> ICreateGitHubRelease.AssetFiles => NuGetPackageFiles;
+    //string ICreateGitHubRelease.Name => MajorMinorPatchVersion;
+    //IEnumerable<AbsolutePath> ICreateGitHubRelease.AssetFiles => NuGetPackageFiles;
 
-    Target ICreateGitHubRelease.CreateGitHubRelease => _ => _
-        .Inherit<ICreateGitHubRelease>()
-        .TriggeredBy<IPublish>()
-        .ProceedAfterFailure()
-        .OnlyWhenStatic(() => GitRepository.IsOnMasterBranch())
-        .Executes(async () =>
-        {
-            var issues = await GitRepository.GetGitHubMilestoneIssues(MilestoneTitle);
-            foreach (var issue in issues)
-                await GitHubActions.Instance.CreateComment(issue.Number, $"Released in {MilestoneTitle}! 🎉");
-        });
+    //Target ICreateGitHubRelease.CreateGitHubRelease => _ => _
+    //    .Inherit<ICreateGitHubRelease>()
+    //    .TriggeredBy<IPublish>()
+    //    .ProceedAfterFailure()
+    //    .OnlyWhenStatic(() => GitRepository.IsOnMasterBranch())
+    //    .Executes(async () =>
+    //    {
+    //        var issues = await GitRepository.GetGitHubMilestoneIssues(MilestoneTitle);
+    //        foreach (var issue in issues)
+    //            await GitHubActions.Instance.CreateComment(issue.Number, $"Released in {MilestoneTitle}! 🎉");
+    //    });
 
     T From<T>()
         where T : INukeBuild

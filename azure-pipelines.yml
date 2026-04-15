@@ -79,6 +79,26 @@ stages:
             inputs:
               artifactName: packages
               pathToPublish: 'buildartifacts/packages'
+      - job: Publish
+        displayName: '🚚 Publish'
+        dependsOn: [ Test, Pack ]
+        steps:
+          - task: Cache@2
+            displayName: 'Cache: nuke-temp'
+            inputs:
+              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
+              restoreKeys: $(Agent.OS) | nuke-temp
+              path: .nuke/temp
+          - task: Cache@2
+            displayName: 'Cache: nuget-packages'
+            inputs:
+              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
+              restoreKeys: $(Agent.OS) | nuget-packages
+              path: $(HOME)/.nuget/packages
+          - task: CmdLine@2
+            displayName: 'Run: Publish'
+            inputs:
+              script: './build.cmd Publish --skip'
   - stage: windows_latest
     displayName: 'windows-latest'
     dependsOn: [  ]
@@ -137,6 +157,26 @@ stages:
             inputs:
               artifactName: packages
               pathToPublish: 'buildartifacts/packages'
+      - job: Publish
+        displayName: '🚚 Publish'
+        dependsOn: [ Test, Pack ]
+        steps:
+          - task: Cache@2
+            displayName: 'Cache: nuke-temp'
+            inputs:
+              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
+              restoreKeys: $(Agent.OS) | nuke-temp
+              path: .nuke/temp
+          - task: Cache@2
+            displayName: 'Cache: nuget-packages'
+            inputs:
+              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
+              restoreKeys: $(Agent.OS) | nuget-packages
+              path: $(USERPROFILE)/.nuget/packages
+          - task: CmdLine@2
+            displayName: 'Run: Publish'
+            inputs:
+              script: './build.cmd Publish --skip'
   - stage: macOS_latest
     displayName: 'macOS-latest'
     dependsOn: [  ]
@@ -195,3 +235,23 @@ stages:
             inputs:
               artifactName: packages
               pathToPublish: 'buildartifacts/packages'
+      - job: Publish
+        displayName: '🚚 Publish'
+        dependsOn: [ Test, Pack ]
+        steps:
+          - task: Cache@2
+            displayName: 'Cache: nuke-temp'
+            inputs:
+              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
+              restoreKeys: $(Agent.OS) | nuke-temp
+              path: .nuke/temp
+          - task: Cache@2
+            displayName: 'Cache: nuget-packages'
+            inputs:
+              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
+              restoreKeys: $(Agent.OS) | nuget-packages
+              path: $(HOME)/.nuget/packages
+          - task: CmdLine@2
+            displayName: 'Run: Publish'
+            inputs:
+              script: './build.cmd Publish --skip'

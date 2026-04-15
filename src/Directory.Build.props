@@ -8,7 +8,7 @@
     <EnforceExtendedAnalyzerRules Condition="'$(IsAnalyzerProject)'=='true'">true</EnforceExtendedAnalyzerRules>
 
     <AssemblyName>ByteLabs.$(MSBuildProjectName)</AssemblyName>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
   </PropertyGroup>
 
   <!-- Include and reference README in nuget package, if a README is in the project directory. -->
