@@ -58,7 +58,7 @@ stages:
               pathToPublish: 'buildartifacts/test-results'
       - job: Pack
         displayName: '📦 Pack'
-        dependsOn: [  ]
+        dependsOn: [ Test ]
         steps:
           - checkout: self
             fetchDepth: 0
@@ -142,7 +142,7 @@ stages:
               pathToPublish: 'buildartifacts/test-results'
       - job: Pack
         displayName: '📦 Pack'
-        dependsOn: [  ]
+        dependsOn: [ Test ]
         steps:
           - checkout: self
             fetchDepth: 0
@@ -226,7 +226,7 @@ stages:
               pathToPublish: 'buildartifacts/test-results'
       - job: Pack
         displayName: '📦 Pack'
-        dependsOn: [  ]
+        dependsOn: [ Test ]
         steps:
           - checkout: self
             fetchDepth: 0

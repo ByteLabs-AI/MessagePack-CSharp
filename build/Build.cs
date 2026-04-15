@@ -132,6 +132,13 @@ partial class Build
         .OnlyWhenStatic(() => Host is not GitHubActions { Workflow: AlphaDeployment })
         .Partition(2);
 
+
+    Target IPack.Pack => _ => _
+    .Inherit<IPack>()
+    .When(Host is AzurePipelines, _ => _
+        .DependsOn<ITest>(x => x.Test));
+
+
     bool IReportCoverage.CreateCoverageHtmlReport => true;
     bool IReportCoverage.ReportToCodecov => false;
 
