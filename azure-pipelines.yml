@@ -56,8 +56,8 @@ stages:
             inputs:
               artifactName: test-results
               pathToPublish: 'buildartifacts/test-results'
-      - job: Pack
-        displayName: '📦 Pack'
+      - job: Publish
+        displayName: '🚚 Publish'
         dependsOn: [ Test ]
         steps:
           - checkout: self
@@ -75,36 +75,9 @@ stages:
               restoreKeys: $(Agent.OS) | nuget-packages
               path: $(HOME)/.nuget/packages
           - task: CmdLine@2
-            displayName: 'Run: Restore, Compile, Pack'
+            displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
-              script: './build.cmd Restore Compile Pack --skip'
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish: packages'
-            inputs:
-              artifactName: packages
-              pathToPublish: 'buildartifacts/packages'
-      - job: Publish
-        displayName: '🚚 Publish'
-        dependsOn: [ Test, Pack ]
-        steps:
-          - checkout: self
-            fetchDepth: 0
-          - task: Cache@2
-            displayName: 'Cache: nuke-temp'
-            inputs:
-              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuke-temp
-              path: .nuke/temp
-          - task: Cache@2
-            displayName: 'Cache: nuget-packages'
-            inputs:
-              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuget-packages
-              path: $(HOME)/.nuget/packages
-          - task: CmdLine@2
-            displayName: 'Run: Publish'
-            inputs:
-              script: './build.cmd Publish --skip'
+              script: './build.cmd Restore Compile Pack Publish --skip'
   - stage: windows_latest
     displayName: 'windows-latest'
     dependsOn: [  ]
@@ -140,8 +113,8 @@ stages:
             inputs:
               artifactName: test-results
               pathToPublish: 'buildartifacts/test-results'
-      - job: Pack
-        displayName: '📦 Pack'
+      - job: Publish
+        displayName: '🚚 Publish'
         dependsOn: [ Test ]
         steps:
           - checkout: self
@@ -159,36 +132,9 @@ stages:
               restoreKeys: $(Agent.OS) | nuget-packages
               path: $(USERPROFILE)/.nuget/packages
           - task: CmdLine@2
-            displayName: 'Run: Restore, Compile, Pack'
+            displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
-              script: './build.cmd Restore Compile Pack --skip'
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish: packages'
-            inputs:
-              artifactName: packages
-              pathToPublish: 'buildartifacts/packages'
-      - job: Publish
-        displayName: '🚚 Publish'
-        dependsOn: [ Test, Pack ]
-        steps:
-          - checkout: self
-            fetchDepth: 0
-          - task: Cache@2
-            displayName: 'Cache: nuke-temp'
-            inputs:
-              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuke-temp
-              path: .nuke/temp
-          - task: Cache@2
-            displayName: 'Cache: nuget-packages'
-            inputs:
-              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuget-packages
-              path: $(USERPROFILE)/.nuget/packages
-          - task: CmdLine@2
-            displayName: 'Run: Publish'
-            inputs:
-              script: './build.cmd Publish --skip'
+              script: './build.cmd Restore Compile Pack Publish --skip'
   - stage: macOS_latest
     displayName: 'macOS-latest'
     dependsOn: [  ]
@@ -224,8 +170,8 @@ stages:
             inputs:
               artifactName: test-results
               pathToPublish: 'buildartifacts/test-results'
-      - job: Pack
-        displayName: '📦 Pack'
+      - job: Publish
+        displayName: '🚚 Publish'
         dependsOn: [ Test ]
         steps:
           - checkout: self
@@ -243,33 +189,6 @@ stages:
               restoreKeys: $(Agent.OS) | nuget-packages
               path: $(HOME)/.nuget/packages
           - task: CmdLine@2
-            displayName: 'Run: Restore, Compile, Pack'
+            displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
-              script: './build.cmd Restore Compile Pack --skip'
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish: packages'
-            inputs:
-              artifactName: packages
-              pathToPublish: 'buildartifacts/packages'
-      - job: Publish
-        displayName: '🚚 Publish'
-        dependsOn: [ Test, Pack ]
-        steps:
-          - checkout: self
-            fetchDepth: 0
-          - task: Cache@2
-            displayName: 'Cache: nuke-temp'
-            inputs:
-              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuke-temp
-              path: .nuke/temp
-          - task: Cache@2
-            displayName: 'Cache: nuget-packages'
-            inputs:
-              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuget-packages
-              path: $(HOME)/.nuget/packages
-          - task: CmdLine@2
-            displayName: 'Run: Publish'
-            inputs:
-              script: './build.cmd Publish --skip'
+              script: './build.cmd Restore Compile Pack Publish --skip'
