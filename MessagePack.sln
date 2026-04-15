@@ -69,12 +69,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessagePack.Analyzers", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionsMarshalBenchmark", "benchmark\CollectionsMarshalBenchmark\CollectionsMarshalBenchmark.csproj", "{9A31C44C-9C51-4D41-B8E5-2864245F877E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{21696E22-C24A-4B91-BA4E-944B9B26F420}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21696E22-C24A-4B91-BA4E-944B9B26F420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21696E22-C24A-4B91-BA4E-944B9B26F420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ABB33EE-A2F1-492B-8DAF-5DF89F0F0B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7ABB33EE-A2F1-492B-8DAF-5DF89F0F0B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ABB33EE-A2F1-492B-8DAF-5DF89F0F0B79}.Release|Any CPU.ActiveCfg = Release|Any CPU

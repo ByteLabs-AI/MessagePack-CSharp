@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <!--<TargetFramework>net9.0</TargetFramework>-->
     <Nullable>enable</Nullable>
     <SignAssembly>True</SignAssembly>
     <LangVersion>preview</LangVersion>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\opensource.snk</AssemblyOriginatorKeyFile>
     <EnforceExtendedAnalyzerRules Condition="'$(IsAnalyzerProject)'=='true'">true</EnforceExtendedAnalyzerRules>
+
+    <AssemblyName>ByteLabs.$(MSBuildProjectName)</AssemblyName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <!-- Include and reference README in nuget package, if a README is in the project directory. -->

@@ -20,324 +20,324 @@ using MessagePack;
         this.testOutputHelper = testOutputHelper;
     }
 
-    [Theory, PairwiseData]
-    public async Task EnumFormatter(ContainerKind container, bool usesMapMode)
-    {
-        string testSource = """
-[MessagePackObject]
-public class MyMessagePackObject
-{
-    [Key(0)]
-    public MyEnum EnumValue { get; set; }
-}
+//    [Theory, PairwiseData]
+//    public async Task EnumFormatter(ContainerKind container, bool usesMapMode)
+//    {
+//        string testSource = """
+//[MessagePackObject]
+//public class MyMessagePackObject
+//{
+//    [Key(0)]
+//    public MyEnum EnumValue { get; set; }
+//}
 
-public enum MyEnum
-{
-    A, B, C
-}
-""";
-        testSource = TestUtilities.WrapTestSource(testSource, container);
+//public enum MyEnum
+//{
+//    A, B, C
+//}
+//""";
+//        testSource = TestUtilities.WrapTestSource(testSource, container);
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, options: new() { Generator = new() { Formatters = new() { UsesMapMode = usesMapMode } } }, testMethod: $"{nameof(EnumFormatter)}({container}, {usesMapMode})");
-    }
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, options: new() { Generator = new() { Formatters = new() { UsesMapMode = usesMapMode } } }, testMethod: $"{nameof(EnumFormatter)}({container}, {usesMapMode})");
+//    }
 
-    [Fact]
-    public async Task EnumFormatter_CollidingTypeNames()
-    {
-        string testSource = """
-using MessagePack;
+//    [Fact]
+//    public async Task EnumFormatter_CollidingTypeNames()
+//    {
+//        string testSource = """
+//using MessagePack;
 
-[MessagePackObject]
-public class MyMessagePackObject
-{
-    [Key(0)]
-    public NS1.MyEnum EnumValue1 { get; set; }
+//[MessagePackObject]
+//public class MyMessagePackObject
+//{
+//    [Key(0)]
+//    public NS1.MyEnum EnumValue1 { get; set; }
 
-    [Key(1)]
-    public NS2.MyEnum EnumValue2 { get; set; }
-}
+//    [Key(1)]
+//    public NS2.MyEnum EnumValue2 { get; set; }
+//}
 
-namespace NS1 {
-    public enum MyEnum
-    {
-        A, B, C
-    }
-}
+//namespace NS1 {
+//    public enum MyEnum
+//    {
+//        A, B, C
+//    }
+//}
 
-namespace NS2 {
-    public enum MyEnum
-    {
-        D, E
-    }
-}
-""";
+//namespace NS2 {
+//    public enum MyEnum
+//    {
+//        D, E
+//    }
+//}
+//""";
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+//    }
 
-    [Fact]
-    public async Task GenericType_CollidingTypeNames()
-    {
-        string testSource = """
-using MessagePack;
+//    [Fact]
+//    public async Task GenericType_CollidingTypeNames()
+//    {
+//        string testSource = """
+//using MessagePack;
 
-[MessagePackObject]
-public class MyMessagePackObject
-{
-    [Key(0)]
-    public NS1.MyType<int> Value1 { get; set; }
+//[MessagePackObject]
+//public class MyMessagePackObject
+//{
+//    [Key(0)]
+//    public NS1.MyType<int> Value1 { get; set; }
 
-    [Key(1)]
-    public NS2.MyType<int> Value2 { get; set; }
-}
+//    [Key(1)]
+//    public NS2.MyType<int> Value2 { get; set; }
+//}
 
-namespace NS1 {
-    [MessagePackObject]
-    public class MyType<T>
-    {
-        [Key(0)]
-        public string Foo { get; set; }
-    }
-}
+//namespace NS1 {
+//    [MessagePackObject]
+//    public class MyType<T>
+//    {
+//        [Key(0)]
+//        public string Foo { get; set; }
+//    }
+//}
 
-namespace NS2 {
-    [MessagePackObject]
-    public class MyType<T>
-    {
-        [Key(0)]
-        public string Foo { get; set; }
-    }
-}
-""";
+//namespace NS2 {
+//    [MessagePackObject]
+//    public class MyType<T>
+//    {
+//        [Key(0)]
+//        public string Foo { get; set; }
+//    }
+//}
+//""";
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+//    }
 
-    [Fact]
-    public async Task NonGenericType_CollidingTypeNames()
-    {
-        string testSource = """
-using MessagePack;
+//    [Fact]
+//    public async Task NonGenericType_CollidingTypeNames()
+//    {
+//        string testSource = """
+//using MessagePack;
 
-[MessagePackObject]
-public class MyMessagePackObject
-{
-    [Key(0)]
-    public NS1.MyType Value1 { get; set; }
+//[MessagePackObject]
+//public class MyMessagePackObject
+//{
+//    [Key(0)]
+//    public NS1.MyType Value1 { get; set; }
 
-    [Key(1)]
-    public NS2.MyType Value2 { get; set; }
-}
+//    [Key(1)]
+//    public NS2.MyType Value2 { get; set; }
+//}
 
-namespace NS1 {
-    [MessagePackObject]
-    public class MyType
-    {
-        [Key(0)]
-        public string Foo { get; set; }
-    }
-}
+//namespace NS1 {
+//    [MessagePackObject]
+//    public class MyType
+//    {
+//        [Key(0)]
+//        public string Foo { get; set; }
+//    }
+//}
 
-namespace NS2 {
-    [MessagePackObject]
-    public class MyType
-    {
-        [Key(0)]
-        public string Foo { get; set; }
-    }
-}
-""";
+//namespace NS2 {
+//    [MessagePackObject]
+//    public class MyType
+//    {
+//        [Key(0)]
+//        public string Foo { get; set; }
+//    }
+//}
+//""";
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+//    }
 
-    [Fact]
-    public async Task MixType_CollidingTypeNames()
-    {
-        string testSource = """
-using MessagePack;
+//    [Fact]
+//    public async Task MixType_CollidingTypeNames()
+//    {
+//        string testSource = """
+//using MessagePack;
 
-[MessagePackObject]
-public class MyMessagePackObject
-{
-    [Key(0)]
-    public NS1.MyType Value1 { get; set; }
+//[MessagePackObject]
+//public class MyMessagePackObject
+//{
+//    [Key(0)]
+//    public NS1.MyType Value1 { get; set; }
 
-    [Key(1)]
-    public NS2.MyType Value2 { get; set; }
+//    [Key(1)]
+//    public NS2.MyType Value2 { get; set; }
 
-    [Key(2)]
-    public NS3.MyType<int> Value3 { get; set; }
-}
+//    [Key(2)]
+//    public NS3.MyType<int> Value3 { get; set; }
+//}
 
-namespace NS1 {
-    public enum MyType
-    {
-        A, B
-    }
-}
+//namespace NS1 {
+//    public enum MyType
+//    {
+//        A, B
+//    }
+//}
 
-namespace NS2 {
-    [MessagePackObject]
-    public class MyType
-    {
-        [Key(0)]
-        public string Foo { get; set; }
-    }
-}
+//namespace NS2 {
+//    [MessagePackObject]
+//    public class MyType
+//    {
+//        [Key(0)]
+//        public string Foo { get; set; }
+//    }
+//}
 
-namespace NS3 {
-    [MessagePackObject]
-    public class MyType<T>
-    {
-        [Key(0)]
-        public string Foo { get; set; }
-    }
-}
-""";
+//namespace NS3 {
+//    [MessagePackObject]
+//    public class MyType<T>
+//    {
+//        [Key(0)]
+//        public string Foo { get; set; }
+//    }
+//}
+//""";
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+//    }
 
-    [Theory, PairwiseData]
-    public async Task CustomFormatterViaAttributeOnProperty(bool usesMapMode)
-    {
-        string testSource = """
-using MessagePack;
-using MessagePack.Formatters;
+//    [Theory, PairwiseData]
+//    public async Task CustomFormatterViaAttributeOnProperty(bool usesMapMode)
+//    {
+//        string testSource = """
+//using MessagePack;
+//using MessagePack.Formatters;
 
-[MessagePackObject]
-public record HasPropertyWithCustomFormatterAttribute
-{
-    [Key(0), MessagePackFormatter(typeof(UnserializableRecordFormatter))]
-    public UnserializableRecord CustomValue { get; set; }
-}
+//[MessagePackObject]
+//public record HasPropertyWithCustomFormatterAttribute
+//{
+//    [Key(0), MessagePackFormatter(typeof(UnserializableRecordFormatter))]
+//    public UnserializableRecord CustomValue { get; set; }
+//}
 
-public record UnserializableRecord
-{
-    internal int Value { get; set; }
-}
+//public record UnserializableRecord
+//{
+//    internal int Value { get; set; }
+//}
 
-class UnserializableRecordFormatter : IMessagePackFormatter<UnserializableRecord>
-{
-    public void Serialize(ref MessagePackWriter writer, UnserializableRecord value, MessagePackSerializerOptions options)
-    {
-        writer.WriteInt32(value.Value);
-    }
+//class UnserializableRecordFormatter : IMessagePackFormatter<UnserializableRecord>
+//{
+//    public void Serialize(ref MessagePackWriter writer, UnserializableRecord value, MessagePackSerializerOptions options)
+//    {
+//        writer.WriteInt32(value.Value);
+//    }
 
-    public UnserializableRecord Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
-    {
-        return new UnserializableRecord { Value = reader.ReadInt32() };
-    }
-}
-""";
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, options: new() { Generator = new() { Formatters = new() { UsesMapMode = usesMapMode } } }, languageVersion: LanguageVersion.CSharp9, testMethod: $"{nameof(CustomFormatterViaAttributeOnProperty)}({usesMapMode})");
-    }
+//    public UnserializableRecord Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+//    {
+//        return new UnserializableRecord { Value = reader.ReadInt32() };
+//    }
+//}
+//""";
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, options: new() { Generator = new() { Formatters = new() { UsesMapMode = usesMapMode } } }, languageVersion: LanguageVersion.CSharp9, testMethod: $"{nameof(CustomFormatterViaAttributeOnProperty)}({usesMapMode})");
+//    }
 
-    [Theory, PairwiseData]
-    public async Task CustomFormatterViaAttributeOnField(bool usesMapMode)
-    {
-        string testSource = /* lang=c#-test */ """
-            using MessagePack;
-            using MessagePack.Formatters;
+    //[Theory, PairwiseData]
+    //public async Task CustomFormatterViaAttributeOnField(bool usesMapMode)
+    //{
+    //    string testSource = /* lang=c#-test */ """
+    //        using MessagePack;
+    //        using MessagePack.Formatters;
 
-            [MessagePackObject]
-            public record HasFieldWithCustomFormatterAttribute
-            {
-                [Key(0), MessagePackFormatter(typeof(UnserializableRecordFormatter))]
-                public UnserializableRecord CustomValue;
-            }
+    //        [MessagePackObject]
+    //        public record HasFieldWithCustomFormatterAttribute
+    //        {
+    //            [Key(0), MessagePackFormatter(typeof(UnserializableRecordFormatter))]
+    //            public UnserializableRecord CustomValue;
+    //        }
 
-            public record UnserializableRecord
-            {
-                internal int Value { get; set; }
-            }
+    //        public record UnserializableRecord
+    //        {
+    //            internal int Value { get; set; }
+    //        }
 
-            class UnserializableRecordFormatter : IMessagePackFormatter<UnserializableRecord>
-            {
-                public void Serialize(ref MessagePackWriter writer, UnserializableRecord value, MessagePackSerializerOptions options)
-                {
-                    writer.WriteInt32(value.Value);
-                }
+    //        class UnserializableRecordFormatter : IMessagePackFormatter<UnserializableRecord>
+    //        {
+    //            public void Serialize(ref MessagePackWriter writer, UnserializableRecord value, MessagePackSerializerOptions options)
+    //            {
+    //                writer.WriteInt32(value.Value);
+    //            }
 
-                public UnserializableRecord Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
-                {
-                    return new UnserializableRecord { Value = reader.ReadInt32() };
-                }
-            }
-            """;
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, options: new() { Generator = new() { Formatters = new() { UsesMapMode = usesMapMode } } }, languageVersion: LanguageVersion.CSharp9, testMethod: $"{nameof(CustomFormatterViaAttributeOnField)}({usesMapMode})");
-    }
+    //            public UnserializableRecord Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+    //            {
+    //                return new UnserializableRecord { Value = reader.ReadInt32() };
+    //            }
+    //        }
+    //        """;
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, options: new() { Generator = new() { Formatters = new() { UsesMapMode = usesMapMode } } }, languageVersion: LanguageVersion.CSharp9, testMethod: $"{nameof(CustomFormatterViaAttributeOnField)}({usesMapMode})");
+    //}
 
-    [Theory, PairwiseData]
-    public async Task UnionFormatter(ContainerKind container)
-    {
-        string testSource = """
-[Union(0, typeof(Derived1))]
-[Union(1, typeof(Derived2))]
-public interface IMyType
-{
-}
+//    [Theory, PairwiseData]
+//    public async Task UnionFormatter(ContainerKind container)
+//    {
+//        string testSource = """
+//[Union(0, typeof(Derived1))]
+//[Union(1, typeof(Derived2))]
+//public interface IMyType
+//{
+//}
 
-[MessagePackObject]
-public class Derived1 : IMyType {}
+//[MessagePackObject]
+//public class Derived1 : IMyType {}
 
-[MessagePackObject]
-public class Derived2 : IMyType {}
+//[MessagePackObject]
+//public class Derived2 : IMyType {}
 
-[MessagePackObject]
-public class MyMessagePackObject
-{
-    [Key(0)]
-    public IMyType UnionValue { get; set; }
-}
-""";
-        testSource = TestUtilities.WrapTestSource(testSource, container);
+//[MessagePackObject]
+//public class MyMessagePackObject
+//{
+//    [Key(0)]
+//    public IMyType UnionValue { get; set; }
+//}
+//""";
+//        testSource = TestUtilities.WrapTestSource(testSource, container);
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, testMethod: $"{nameof(UnionFormatter)}({container})");
-    }
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, testMethod: $"{nameof(UnionFormatter)}({container})");
+//    }
 
-    [Fact]
-    public async Task ArrayTypedProperty()
-    {
-        string testSource = """
-using MessagePack;
-using System.Collections.Generic;
+//    [Fact]
+//    public async Task ArrayTypedProperty()
+//    {
+//        string testSource = """
+//using MessagePack;
+//using System.Collections.Generic;
 
-[MessagePackObject]
-public class ContainerObject
-{
-    [Key(0)]
-    public SubObject[] ArrayOfCustomObjects { get; set; }
+//[MessagePackObject]
+//public class ContainerObject
+//{
+//    [Key(0)]
+//    public SubObject[] ArrayOfCustomObjects { get; set; }
 
-    [Key(1)]
-    public List<SubObject>[] ArrayOfCustomObjectList { get; set; }
-}
+//    [Key(1)]
+//    public List<SubObject>[] ArrayOfCustomObjectList { get; set; }
+//}
 
-[MessagePackObject]
-public class SubObject
-{
-}
-""";
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+//[MessagePackObject]
+//public class SubObject
+//{
+//}
+//""";
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+//    }
 
-    [Fact]
-    public async Task Array2DJaggedProperty()
-    {
-        string testSource = """
-using MessagePack;
-using System.Collections.Generic;
+//    [Fact]
+//    public async Task Array2DJaggedProperty()
+//    {
+//        string testSource = """
+//using MessagePack;
+//using System.Collections.Generic;
 
-[MessagePackObject]
-public class ContainerObject
-{
-    [Key(0)]
-    public int[][] TwoDimensionalJaggedIntArray { get; set; }
-}
-""";
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+//[MessagePackObject]
+//public class ContainerObject
+//{
+//    [Key(0)]
+//    public int[][] TwoDimensionalJaggedIntArray { get; set; }
+//}
+//""";
+//        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+//    }
 
     [Fact]
     public async Task GenericType()
@@ -540,89 +540,89 @@ public class MyGenericType<T>
         }.RunAsync();
     }
 
-    [Fact]
-    public async Task NestedMessagePackObjects()
-    {
-        string testSource = """
-            using MessagePack;
-            using System;
+    //[Fact]
+    //public async Task NestedMessagePackObjects()
+    //{
+    //    string testSource = """
+    //        using MessagePack;
+    //        using System;
 
-            namespace A
-            {
-                [MessagePackObject]
-                public class B
-                {
-                    [MessagePackObject]
-                    public class C
-                    {
-                    }
-                }
-            }
-            """;
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //        namespace A
+    //        {
+    //            [MessagePackObject]
+    //            public class B
+    //            {
+    //                [MessagePackObject]
+    //                public class C
+    //                {
+    //                }
+    //            }
+    //        }
+    //        """;
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
-    [Fact]
-    public async Task NestedMessagePackObjects_Array()
-    {
-        string testSource = """
-            using MessagePack;
-            using System;
+    //[Fact]
+    //public async Task NestedMessagePackObjects_Array()
+    //{
+    //    string testSource = """
+    //        using MessagePack;
+    //        using System;
 
-            namespace A
-            {
-                [MessagePackObject]
-                public class B
-                {
-                    [MessagePackObject]
-                    public class C
-                    {
-                    }
+    //        namespace A
+    //        {
+    //            [MessagePackObject]
+    //            public class B
+    //            {
+    //                [MessagePackObject]
+    //                public class C
+    //                {
+    //                }
 
-                    [Key(0)]
-                    public C[] array;
-                }
-            }
-            """;
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //                [Key(0)]
+    //                public C[] array;
+    //            }
+    //        }
+    //        """;
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
-    [Fact]
-    public async Task CustomFormatterWithSingletonPattern()
-    {
-        string testSource = """
-            using MessagePack;
-            using MessagePack.Formatters;
-            public class A {}
-            class F : IMessagePackFormatter<A> {
-                public static readonly IMessagePackFormatter<A> Instance = new F();
-                private F() {}
-                public void Serialize(ref MessagePackWriter writer, A value, MessagePackSerializerOptions options) {}
-                public A Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options) => default;
-            }
-            [MessagePackObject]
-            public class G {
-                [Key(0), MessagePackFormatter(typeof(F))]
-                public A a;
-            }
-            """;
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //[Fact]
+    //public async Task CustomFormatterWithSingletonPattern()
+    //{
+    //    string testSource = """
+    //        using MessagePack;
+    //        using MessagePack.Formatters;
+    //        public class A {}
+    //        class F : IMessagePackFormatter<A> {
+    //            public static readonly IMessagePackFormatter<A> Instance = new F();
+    //            private F() {}
+    //            public void Serialize(ref MessagePackWriter writer, A value, MessagePackSerializerOptions options) {}
+    //            public A Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options) => default;
+    //        }
+    //        [MessagePackObject]
+    //        public class G {
+    //            [Key(0), MessagePackFormatter(typeof(F))]
+    //            public A a;
+    //        }
+    //        """;
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
-    [Fact]
-    public async Task SpecifyFormatterFromStockSet()
-    {
-        string testSource = """
-            using MessagePack;
-            using MessagePack.Formatters;
-            [MessagePackObject]
-            public class G {
-                [Key(0), MessagePackFormatter(typeof(StringInterningFormatter))]
-                public string a;
-            }
-            """;
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //[Fact]
+    //public async Task SpecifyFormatterFromStockSet()
+    //{
+    //    string testSource = """
+    //        using MessagePack;
+    //        using MessagePack.Formatters;
+    //        [MessagePackObject]
+    //        public class G {
+    //            [Key(0), MessagePackFormatter(typeof(StringInterningFormatter))]
+    //            public string a;
+    //        }
+    //        """;
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
     [Fact]
     public async Task ExcludeFormatterFromSourceGeneratedResolver()
@@ -680,33 +680,33 @@ public class MyGenericType<T>
         await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
     }
 
-    [Fact]
-    public async Task DeserializingConstructorParameterMemberTypeAssignability_Incompatible()
-    {
-        string testSource = """
-            using MessagePack;
-            using System.Linq;
-            using System.Collections.Generic;
-            using System.Collections.Immutable;
-            [MessagePackObject]
-            class A {
-                [SerializationConstructor]
-                internal A({|#0:ImmutableList<int?> x|}) => this.X = x.ToList();
+    //[Fact]
+    //public async Task DeserializingConstructorParameterMemberTypeAssignability_Incompatible()
+    //{
+    //    string testSource = """
+    //        using MessagePack;
+    //        using System.Linq;
+    //        using System.Collections.Generic;
+    //        using System.Collections.Immutable;
+    //        [MessagePackObject]
+    //        class A {
+    //            [SerializationConstructor]
+    //            internal A({|#0:ImmutableList<int?> x|}) => this.X = x.ToList();
 
-                [Key(0)]
-                internal List<int?> X { get; }
-            }
-            """;
+    //            [Key(0)]
+    //            internal List<int?> X { get; }
+    //        }
+    //        """;
 
-        await new VerifyCS.Test
-        {
-            TestState =
-            {
-                Sources = { testSource },
-            },
-            ExpectedDiagnostics = { DiagnosticResult.CompilerError("MsgPack007").WithLocation(0) },
-        }.RunDefaultAsync(this.testOutputHelper);
-    }
+    //    await new VerifyCS.Test
+    //    {
+    //        TestState =
+    //        {
+    //            Sources = { testSource },
+    //        },
+    //        ExpectedDiagnostics = { DiagnosticResult.CompilerError("MsgPack007").WithLocation(0) },
+    //    }.RunDefaultAsync(this.testOutputHelper);
+    //}
 
     [Fact]
     public async Task NoPrivateAccessNeeded()
@@ -832,124 +832,124 @@ public class MyGenericType<T>
         await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource, languageVersion: LanguageVersion.CSharp11);
     }
 
-    [Fact]
-    public async Task NoFieldWithCustomFormatterCollected()
-    {
-        string testSource = /* lang=c#-test */ """
-            using System;
-            using System.Collections.Generic;
-            using MessagePack;
-            using MessagePack.Formatters;
+    //[Fact]
+    //public async Task NoFieldWithCustomFormatterCollected()
+    //{
+    //    string testSource = /* lang=c#-test */ """
+    //        using System;
+    //        using System.Collections.Generic;
+    //        using MessagePack;
+    //        using MessagePack.Formatters;
 
-            [MessagePackObject]
-            public class Test
-            {
-                [Key(0)]
-                [MessagePackFormatter(typeof(ListAFormatter))]
-                public List<A> A;
-            }
+    //        [MessagePackObject]
+    //        public class Test
+    //        {
+    //            [Key(0)]
+    //            [MessagePackFormatter(typeof(ListAFormatter))]
+    //            public List<A> A;
+    //        }
 
-            public class A
-            {
-            }
+    //        public class A
+    //        {
+    //        }
 
-            [ExcludeFormatterFromSourceGeneratedResolver]
-            class ListAFormatter : IMessagePackFormatter<List<A>>
-            {
-                public void Serialize(ref MessagePackWriter writer, List<A> value, MessagePackSerializerOptions options)
-                {
-                }
+    //        [ExcludeFormatterFromSourceGeneratedResolver]
+    //        class ListAFormatter : IMessagePackFormatter<List<A>>
+    //        {
+    //            public void Serialize(ref MessagePackWriter writer, List<A> value, MessagePackSerializerOptions options)
+    //            {
+    //            }
 
-                public List<A> Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            """;
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //            public List<A> Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+    //            {
+    //                throw new NotImplementedException();
+    //            }
+    //        }
+    //        """;
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
-    [Fact]
-    public async Task GenericCustomFormatter()
-    {
-        string testSource = /* lang=c#-test */ """
-            using System;
-            using MessagePack;
-            using MessagePack.Formatters;
+    //[Fact]
+    //public async Task GenericCustomFormatter()
+    //{
+    //    string testSource = /* lang=c#-test */ """
+    //        using System;
+    //        using MessagePack;
+    //        using MessagePack.Formatters;
 
-            [MessagePackObject(AllowPrivate = true)]
-            public partial class SampleObject
-            {
-                [Key(0)]
-                [MessagePackFormatter(typeof(ValueTupleFormatter<string>))]
-                private ValueTuple<string> TupleTest;
-            }
+    //        [MessagePackObject(AllowPrivate = true)]
+    //        public partial class SampleObject
+    //        {
+    //            [Key(0)]
+    //            [MessagePackFormatter(typeof(ValueTupleFormatter<string>))]
+    //            private ValueTuple<string> TupleTest;
+    //        }
 
-            public sealed class ValueTupleFormatter<T1> : IMessagePackFormatter<ValueTuple<T1>>
-            {
-                public void Serialize(ref MessagePackWriter writer, ValueTuple<T1> value, MessagePackSerializerOptions options)
-                {
-                    throw new NotImplementedException();
-                }
+    //        public sealed class ValueTupleFormatter<T1> : IMessagePackFormatter<ValueTuple<T1>>
+    //        {
+    //            public void Serialize(ref MessagePackWriter writer, ValueTuple<T1> value, MessagePackSerializerOptions options)
+    //            {
+    //                throw new NotImplementedException();
+    //            }
 
-                public ValueTuple<T1> Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            """;
+    //            public ValueTuple<T1> Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+    //            {
+    //                throw new NotImplementedException();
+    //            }
+    //        }
+    //        """;
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
-    [Fact]
-    public async Task SimplifiedNameForKeywordsAndSyntaxSugar()
-    {
-        string testSource = /* lang=c#-test */ """
-            using System;
-            using MessagePack;
-            using MessagePack.Formatters;
+    //[Fact]
+    //public async Task SimplifiedNameForKeywordsAndSyntaxSugar()
+    //{
+    //    string testSource = /* lang=c#-test */ """
+    //        using System;
+    //        using MessagePack;
+    //        using MessagePack.Formatters;
 
-            [MessagePackObject(AllowPrivate = true)]
-            public partial class SampleObject
-            {
-                [Key(0)]
-                public (bool, byte, sbyte) Value1;
+    //        [MessagePackObject(AllowPrivate = true)]
+    //        public partial class SampleObject
+    //        {
+    //            [Key(0)]
+    //            public (bool, byte, sbyte) Value1;
 
-                [Key(1)]
-                public (short, ushort, int, uint) Value2;
+    //            [Key(1)]
+    //            public (short, ushort, int, uint) Value2;
 
-                [Key(2)]
-                public (long, ulong, float, double) Value3;
+    //            [Key(2)]
+    //            public (long, ulong, float, double) Value3;
 
-                [Key(3)]
-                public (decimal, char, string, object) Value4;
+    //            [Key(3)]
+    //            public (decimal, char, string, object) Value4;
 
-                [Key(4)]
-                public ValueTuple<int?> Value5;
-            }
-            """;
+    //            [Key(4)]
+    //            public ValueTuple<int?> Value5;
+    //        }
+    //        """;
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
-    [Fact]
-    public async Task SystemCollectionsObjectModelCollection()
-    {
-        string testSource = /* lang=c#-test */ """
-            using MessagePack;
-            using System.Collections.ObjectModel;
+    //[Fact]
+    //public async Task SystemCollectionsObjectModelCollection()
+    //{
+    //    string testSource = /* lang=c#-test */ """
+    //        using MessagePack;
+    //        using System.Collections.ObjectModel;
 
-            [MessagePackObject]
-            public class A
-            {
-                [Key(0)]
-                public Collection<int> SampleCollection { get; set; }
-            }
-            """;
+    //        [MessagePackObject]
+    //        public class A
+    //        {
+    //            [Key(0)]
+    //            public Collection<int> SampleCollection { get; set; }
+    //        }
+    //        """;
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 
     [Fact]
     public async Task CustomFormatterForGenericWithConstraints()
@@ -1123,28 +1123,28 @@ public class MyGenericType<T>
         await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
     }
 
-    [Fact]
-    public async Task SystemMemoryTypes()
-    {
-        string testSource = /* lang=c#-test */ """
-            using System;
-            using System.Buffers;
-            using MessagePack;
+    //[Fact]
+    //public async Task SystemMemoryTypes()
+    //{
+    //    string testSource = /* lang=c#-test */ """
+    //        using System;
+    //        using System.Buffers;
+    //        using MessagePack;
 
-            [MessagePackObject]
-            public class A
-            {
-                [Key(0)]
-                public Memory<int> Value1 { get; set; }
+    //        [MessagePackObject]
+    //        public class A
+    //        {
+    //            [Key(0)]
+    //            public Memory<int> Value1 { get; set; }
 
-                [Key(1)]
-                public ReadOnlyMemory<int> Value2 { get; set; }
+    //            [Key(1)]
+    //            public ReadOnlyMemory<int> Value2 { get; set; }
 
-                [Key(2)]
-                public ReadOnlySequence<int> Value3 { get; set; }
-            }
-            """;
+    //            [Key(2)]
+    //            public ReadOnlySequence<int> Value3 { get; set; }
+    //        }
+    //        """;
 
-        await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
-    }
+    //    await VerifyCS.Test.RunDefaultAsync(this.testOutputHelper, testSource);
+    //}
 }

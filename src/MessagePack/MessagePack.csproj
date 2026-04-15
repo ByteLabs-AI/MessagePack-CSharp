@@ -10,7 +10,7 @@
     <Title>MessagePack for C#</Title>
     <Description>Extremely Fast MessagePack(MsgPack) Serializer for C# (.NET Framework, .NET 6, Unity, Xamarin).</Description>
     <PackageTags>MsgPack;MessagePack;Serialization;Formatter;Serializer;Unity;Xamarin</PackageTags>
-    <AssemblyName>MessagePack</AssemblyName>
+    <!--<AssemblyName>MessagePack</AssemblyName>-->
   </PropertyGroup>
 
   <ItemGroup>
