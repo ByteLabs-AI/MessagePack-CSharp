@@ -14,7 +14,7 @@ using Nuke.Components;
     PullRequestsDisabled = true,
     InvokedTargets = new[] { nameof(ITest.Test), nameof(IPublish.Publish) },
     NonEntryTargets = new[] { nameof(IRestore.Restore), nameof(ICompile.Compile), nameof(IPack.Pack) },
-    ExcludedTargets = new[] { nameof(Clean), nameof(ISignPackages.SignPackages) },
+    ExcludedTargets = new[] { nameof(Clean), nameof(ISignPackages.SignPackages), nameof(ICreateGitHubRelease.CreateGitHubRelease) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
     ImportVariableGroups = new[] { "GlobalVariablesLibrary" },
     FetchDepth = 0,

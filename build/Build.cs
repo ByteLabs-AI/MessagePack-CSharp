@@ -164,8 +164,10 @@ partial class Build
     IEnumerable<string> IReportIssues.InspectCodeFailOnCategories => new string[0];
 
     Configure<DotNetPackSettings> IPack.PackSettings => _ => _
-        .When(Host is Terminal, _ => _
-            .SetVersion(DefaultDeploymentVersion))
+        .WhenNotNull(this as IHazGitVersion, (_, o) => _
+            .SetVersion(o.Versioning.SemVer))
+        .WhenNotNull(this as IHazNerdbankGitVersioning, (_, o) => _
+            .SetVersion(o.Versioning.AssemblyVersion))
          .SetNoBuild(false);
 
     [Parameter] readonly string BetaArtifactsFeed;
@@ -181,7 +183,7 @@ partial class Build
     Target IPublish.Publish => _ => _
         .Inherit<IPublish>()
         .Consumes(From<IPack>().Pack)
-        .Requires(() => IsPublicRelease && Host is AzurePipelines)
+        .Requires(() => Host is AzurePipelines)
         .WhenSkipped(DependencyBehavior.Execute);
 
     IEnumerable<AbsolutePath> NuGetPackageFiles

@@ -84,31 +84,6 @@ stages:
               script: './build.cmd Restore Compile Pack Publish --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      - job: CreateGitHubRelease
-        displayName: 'CreateGitHubRelease'
-        dependsOn: [  ]
-        steps:
-          - task: NuGetAuthenticate@1
-          - checkout: self
-            fetchDepth: 0
-          - task: Cache@2
-            displayName: 'Cache: nuke-temp'
-            inputs:
-              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuke-temp
-              path: .nuke/temp
-          - task: Cache@2
-            displayName: 'Cache: nuget-packages'
-            inputs:
-              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuget-packages
-              path: $(HOME)/.nuget/packages
-          - task: CmdLine@2
-            displayName: 'Run: CreateGitHubRelease'
-            inputs:
-              script: './build.cmd CreateGitHubRelease --skip'
-            env:
-              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   - stage: windows_latest
     displayName: 'windows-latest'
     dependsOn: [  ]
@@ -172,31 +147,6 @@ stages:
               script: './build.cmd Restore Compile Pack Publish --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      - job: CreateGitHubRelease
-        displayName: 'CreateGitHubRelease'
-        dependsOn: [  ]
-        steps:
-          - task: NuGetAuthenticate@1
-          - checkout: self
-            fetchDepth: 0
-          - task: Cache@2
-            displayName: 'Cache: nuke-temp'
-            inputs:
-              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuke-temp
-              path: .nuke/temp
-          - task: Cache@2
-            displayName: 'Cache: nuget-packages'
-            inputs:
-              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuget-packages
-              path: $(USERPROFILE)/.nuget/packages
-          - task: CmdLine@2
-            displayName: 'Run: CreateGitHubRelease'
-            inputs:
-              script: './build.cmd CreateGitHubRelease --skip'
-            env:
-              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   - stage: macOS_latest
     displayName: 'macOS-latest'
     dependsOn: [  ]
@@ -258,30 +208,5 @@ stages:
             displayName: 'Run: Restore, Compile, Pack, Publish'
             inputs:
               script: './build.cmd Restore Compile Pack Publish --skip'
-            env:
-              SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      - job: CreateGitHubRelease
-        displayName: 'CreateGitHubRelease'
-        dependsOn: [  ]
-        steps:
-          - task: NuGetAuthenticate@1
-          - checkout: self
-            fetchDepth: 0
-          - task: Cache@2
-            displayName: 'Cache: nuke-temp'
-            inputs:
-              key: $(Agent.OS) | nuke-temp | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuke-temp
-              path: .nuke/temp
-          - task: Cache@2
-            displayName: 'Cache: nuget-packages'
-            inputs:
-              key: $(Agent.OS) | nuget-packages | global.json, src/**/*.csproj
-              restoreKeys: $(Agent.OS) | nuget-packages
-              path: $(HOME)/.nuget/packages
-          - task: CmdLine@2
-            displayName: 'Run: CreateGitHubRelease'
-            inputs:
-              script: './build.cmd CreateGitHubRelease --skip'
             env:
               SYSTEM_ACCESSTOKEN: $(System.AccessToken)
