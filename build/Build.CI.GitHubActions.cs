@@ -33,7 +33,7 @@ using Nuke.Components;
     InvokedTargets = new[] { nameof(IPublish.Publish) },
     EnableGitHubToken = true,
     PublishArtifacts = false,
-    ImportSecrets = new[] { nameof(FeedzNuGetApiKey) })]
+    ImportSecrets = new[] { nameof(PublishNuGetApiKey) })]
 partial class Build
 {
     const string AlphaDeployment = "alpha-deployment";

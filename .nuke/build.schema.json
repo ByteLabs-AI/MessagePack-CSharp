@@ -51,6 +51,8 @@
         "CheckoutExternalRepositories",
         "Clean",
         "Compile",
+        "CreateGitHubRelease",
+        "Feature",
         "GeneratePublicApi",
         "Hotfix",
         "Milestone",
@@ -157,7 +159,10 @@
             "Release"
           ]
         },
-        "FeedzNuGetApiKey": {
+        "FeatureName": {
+          "type": "string"
+        },
+        "GitHubReleaseGitHubToken": {
           "type": "string",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
@@ -168,7 +173,7 @@
         "Major": {
           "type": "boolean"
         },
-        "PublicNuGetApiKey": {
+        "PublishNuGetApiKey": {
           "type": "string",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },

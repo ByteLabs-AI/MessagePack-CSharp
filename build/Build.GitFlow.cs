@@ -17,6 +17,9 @@ partial class Build
     [Parameter] readonly bool AutoStash = true;
     [Parameter] readonly bool Major;
 
+    [Parameter] readonly string FeatureName;
+
+
     string MajorMinorPatchVersion => Major ? $"{GitVersion.Major + 1}.0.0" : GitVersion.MajorMinorPatch;
     string MilestoneTitle => $"v{MajorMinorPatchVersion}";
 
@@ -47,6 +50,16 @@ partial class Build
 
             Git($"add {changelogFile}");
             Git($"commit -m \"chore: {Path.GetFileName(changelogFile)} for {MajorMinorPatchVersion}\"");
+        });
+
+    [UsedImplicitly]
+    Target Feature => _ => _
+        .Requires(() => FeatureName)
+        .Requires(() => !GitRepository.IsOnFeatureBranch() || GitHasCleanWorkingCopy())
+        .Executes(() =>
+        {
+            if (!GitRepository.IsOnFeatureBranch())
+                Checkout($"{FeaturesBranchPrefix}/{FeatureName}", start: DevelopBranch);
         });
 
     [UsedImplicitly]
