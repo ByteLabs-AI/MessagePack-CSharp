@@ -15,7 +15,8 @@ using Nuke.Components;
     NonEntryTargets = new[] { nameof(IRestore.Restore), nameof(ICompile.Compile) },
     ExcludedTargets = new[] { nameof(Clean), nameof(ISignPackages.SignPackages) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
-    ImportVariableGroups = new[] { "GlobalVariablesLibrary" })]
+    ImportVariableGroups = new[] { "GlobalVariablesLibrary" },
+    FetchDepth = 0)]
 partial class Build
 {
     public class AzurePipelinesAttribute : Nuke.Common.CI.AzurePipelines.AzurePipelinesAttribute
