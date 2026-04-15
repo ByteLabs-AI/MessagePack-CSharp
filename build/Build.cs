@@ -68,6 +68,7 @@ partial class Build
 
     const string MasterBranch = "master";
     const string DevelopBranch = "develop";
+    const string FeaturesBranchPrefix = "feature";
     const string ReleaseBranchPrefix = "release";
     const string HotfixBranchPrefix = "hotfix";
 
@@ -107,12 +108,21 @@ partial class Build
     });
 
     Configure<DotNetBuildSettings> ICompile.CompileSettings => _ => _
+        .WhenNotNull(this as IHazGitVersion, (_, o) => _
+            .SetVersion(o.Versioning.AssemblySemVer))
+        .WhenNotNull(this as IHazNerdbankGitVersioning, (_, o) => _
+            .SetVersion(o.Versioning.AssemblyVersion))
         .When(!ScheduledTargets.Contains(((IPublish)this).Publish), _ => _
             .ClearProperties());
 
     Configure<DotNetPublishSettings> ICompile.PublishSettings => _ => _
+        .WhenNotNull(this as IHazGitVersion, (_, o) => _
+            .SetVersion(o.Versioning.AssemblySemVer))
+        .WhenNotNull(this as IHazNerdbankGitVersioning, (_, o) => _
+            .SetVersion(o.Versioning.AssemblyVersion))
         .When(!ScheduledTargets.Contains(((IPublish)this).Publish), _ => _
             .ClearProperties());
+
 
     IEnumerable<(Nuke.Common.ProjectModel.Project Project, string Framework)> ICompile.PublishConfigurations =>
         from project in _solution.AllProjects.Where(x => x.Name.StartsWith("MessagePack"))
