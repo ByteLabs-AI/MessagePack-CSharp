@@ -39,5 +39,5 @@ jobs:
       - name: 'Run: Publish'
         run: ./build.cmd Publish
         env:
-          FeedzNuGetApiKey: ${{ secrets.FEEDZ_NUGET_API_KEY }}
+          PublishNuGetApiKey: ${{ secrets.PUBLISH_NUGET_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
