@@ -26,7 +26,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [ShutdownDotNetAfterServerBuild]
 partial class Build
     : NukeBuild,
-        //IHazChangelog,
+        IHazChangelog,
         IHazGitRepository,
         IHazGitVersion,
         //IHazNerdbankGitVersioning,
@@ -38,8 +38,8 @@ partial class Build
         IReportCoverage,
         IReportIssues,
         IReportDuplicates,
-        IPublish//,
-                //ICreateGitHubRelease
+        IPublish,
+        ICreateGitHubRelease
 {
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -190,20 +190,20 @@ partial class Build
     Configure<DotNetNuGetPushSettings> IPublish.PushSettings => _ => _
             .SetSkipDuplicate(true);
 
-    //string ICreateGitHubRelease.Name => MajorMinorPatchVersion;
-    //IEnumerable<AbsolutePath> ICreateGitHubRelease.AssetFiles => NuGetPackageFiles;
+    string ICreateGitHubRelease.Name => MajorMinorPatchVersion;
+    IEnumerable<AbsolutePath> ICreateGitHubRelease.AssetFiles => NuGetPackageFiles;
 
-    //Target ICreateGitHubRelease.CreateGitHubRelease => _ => _
-    //    .Inherit<ICreateGitHubRelease>()
-    //    .TriggeredBy<IPublish>()
-    //    .ProceedAfterFailure()
-    //    .OnlyWhenStatic(() => GitRepository.IsOnMasterBranch())
-    //    .Executes(async () =>
-    //    {
-    //        var issues = await GitRepository.GetGitHubMilestoneIssues(MilestoneTitle);
-    //        foreach (var issue in issues)
-    //            await GitHubActions.Instance.CreateComment(issue.Number, $"Released in {MilestoneTitle}! 🎉");
-    //    });
+    Target ICreateGitHubRelease.CreateGitHubRelease => _ => _
+        .Inherit<ICreateGitHubRelease>()
+        .TriggeredBy<IPublish>()
+        .ProceedAfterFailure()
+        .OnlyWhenStatic(() => GitRepository.IsOnMasterBranch())
+        .Executes(async () =>
+        {
+            var issues = await GitRepository.GetGitHubMilestoneIssues(MilestoneTitle);
+            foreach (var issue in issues)
+                await GitHubActions.Instance.CreateComment(issue.Number, $"Released in {MilestoneTitle}! 🎉");
+        });
 
     T From<T>()
         where T : INukeBuild

@@ -51,6 +51,7 @@
         "CheckoutExternalRepositories",
         "Clean",
         "Compile",
+        "CreateGitHubRelease",
         "Feature",
         "GeneratePublicApi",
         "Hotfix",
@@ -160,6 +161,10 @@
         },
         "FeatureName": {
           "type": "string"
+        },
+        "GitHubReleaseGitHubToken": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "IgnoreFailedSources": {
           "type": "boolean",
